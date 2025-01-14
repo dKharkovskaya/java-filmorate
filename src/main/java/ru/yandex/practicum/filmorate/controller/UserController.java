@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ConditionsNotMetException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
@@ -61,13 +62,31 @@ public class UserController {
         if (log.isInfoEnabled()) {
             log.info("PUT /user/{}", user.getName());
         }
-        if (users.containsKey(user.getId())) {
-            users.get(user.getId()).setName(user.getName());
-            users.get(user.getId()).setBirthday(user.getBirthday());
-            users.get(user.getId()).setLogin(user.getLogin());
-            users.get(user.getId()).setEmail(user.getEmail());
+        if (user.getId() == null) {
+            throw new ConditionsNotMetException("Id должен быть указан");
         }
-        return user;
+        if (users.containsKey(user.getId())) {
+            User oldUser = users.get(user.getId());
+            if (user.getEmail() == null || user.getEmail().isBlank() || !user.getEmail().contains("@")) {
+                throw new ConditionsNotMetException("электронная почта не может быть пустой и должна содержать символ @");
+            }
+            if (user.getLogin() == null || user.getLogin().isBlank() || user.getLogin().contains(" ")) {
+                throw new ConditionsNotMetException("логин не может быть пустым и содержать пробелы");
+            }
+            if (user.getName() == null || user.getName().isBlank()) {
+                user.setName(user.getLogin());
+            }
+            if (user.getBirthday().isAfter(LocalDate.now())) {
+                throw new ConditionsNotMetException("дата рождения не может быть в будущем");
+            }
+            // если пользователь найден и все условия соблюдены, обновляем её содержимое
+            oldUser.setName(user.getName());
+            oldUser.setBirthday(user.getBirthday());
+            oldUser.setLogin(user.getLogin());
+            oldUser.setEmail(user.getEmail());
+            return oldUser;
+        }
+        throw new NotFoundException("Пост с id = " + user.getId() + " не найден");
     }
 
 }
