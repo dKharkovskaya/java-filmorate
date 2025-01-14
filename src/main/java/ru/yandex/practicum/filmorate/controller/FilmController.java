@@ -61,9 +61,9 @@ public class FilmController {
         log.info("PUT /film/{}", film.getName());
         if (films.containsKey(film.getId())) {
             films.get(film.getId()).setDescription(film.getDescription());
-            films.get(film.getId()).setName(film.getName());
-            films.get(film.getId()).setDuration(film.getDuration());
-            films.get(film.getId()).setReleaseDate(film.getReleaseDate());
+        //    films.get(film.getId()).setName(film.getName());
+        //    films.get(film.getId()).setDuration(film.getDuration());
+        //    films.get(film.getId()).setReleaseDate(film.getReleaseDate());
         }
         return film;
     }
