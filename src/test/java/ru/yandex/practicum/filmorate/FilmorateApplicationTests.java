@@ -19,7 +19,7 @@ class FilmorateApplicationTests {
 
     @BeforeAll
     static void setUp() {
-        user1 = new User("user@ty.ru", "user", "Vasya", LocalDate.of(1990, 1, 1));
+        user1 = new User("user@ty.ru", "user",  LocalDate.of(1990, 1, 1));
         film1 = new Film(0, "film1", "film1 description", LocalDate.of(2000, 2, 2), 120);
     }
 
