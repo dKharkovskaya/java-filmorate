@@ -40,7 +40,7 @@ class FilmorateApplicationTests {
     }
 
     @Test
-    void _updateFilm() {
+    void firstUpdateFilm() {
         Film filmCreated = filmController.update(film1);
         assertNotNull(filmCreated, "updateFilm does not return correct object");
         film1 = filmCreated;
@@ -60,7 +60,7 @@ class FilmorateApplicationTests {
     }
 
     @Test
-    void _updateUser() {
+    void firstUpdateUser() {
         User userCreated = userController.update(user1);
         assertNotNull(userCreated, "updateUser does not return correct object");
         user1 = userCreated;
