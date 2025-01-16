@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,8 +13,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import java.time.LocalDate;
 import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class FilmorateApplicationTests {
@@ -41,9 +41,11 @@ class FilmorateApplicationTests {
 
     @Test
     void firstUpdateFilm() {
-        Film filmCreated = filmController.update(film1);
-        assertNotNull(filmCreated, "updateFilm does not return correct object");
-        film1 = filmCreated;
+        Film filmCreated = filmController.create(film1);
+        Film updateFilm = filmCreated;
+        updateFilm.setDuration(100);
+        updateFilm = filmController.update(film1);
+        assertEquals(100, updateFilm.getDuration());
     }
 
     @Test
@@ -62,27 +64,34 @@ class FilmorateApplicationTests {
     @Test
     void firstUpdateUser() {
         User userCreated = userController.update(user1);
-        assertNotNull(userCreated, "updateUser does not return correct object");
-        user1 = userCreated;
+        User updateUser = userCreated;
+        updateUser.setName("Pasha");
+        updateUser = userController.update(user1);
+        assertEquals("Pasha", updateUser.getName());
     }
 
+    //логин не может быть пустым и содержать пробелы
     @Test
-    public void shouldExceptionUser() throws ValidationException {
-        Throwable thrown = assertThrows(ValidationException.class, () -> {
-            User user = new User("ggg", "ytyt", LocalDate.of(2026, 1, 1));
+    void createUserWithoutLogin() {
+        User user = new User("ggg@uu.ru", "", LocalDate.of(2026, 1, 1));
+        ValidationException thrown = Assertions.assertThrows(ValidationException.class, () -> {
             User createdUser = userController.create(user);
-        });
-        //проверка, вылетело ли исключение. Если вылетело - то тест вернет положительный результат
-        assertNotNull(thrown.getMessage());
+        }, "You can't created User without login");
     }
 
     @Test
-    public void shouldExceptionFilm() throws ValidationException {
-        Throwable thrown = assertThrows(ValidationException.class, () -> {
-            Film film = new Film("", "ytyt", LocalDate.of(2026, 1, 1), 67);
+    public void shouldExceptionUser() {
+        User user = new User("ggg", "ytyt", LocalDate.of(2026, 1, 1));
+        ValidationException thrown = Assertions.assertThrows(ValidationException.class, () -> {
+            User createdUser = userController.create(user);
+        }, "You can't created User without correct email");
+    }
+
+    @Test
+    public void shouldExceptionFilm() {
+        Film film = new Film("", "ytyt", LocalDate.of(2026, 1, 1), 67);
+        ValidationException thrown = Assertions.assertThrows(ValidationException.class, () -> {
             Film createdFilm = filmController.create(film);
-        });
-        //проверка, вылетело ли исключение. Если вылетело - то тест вернет положительный результат
-        assertNotNull(thrown.getMessage());
+        }, "You can't created Film without name");
     }
 }
