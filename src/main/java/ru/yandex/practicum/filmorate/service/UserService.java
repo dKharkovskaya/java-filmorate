@@ -27,8 +27,8 @@ public class UserService {
         return userStorage.create(user);
     }
 
-    public User updateUser(User User) {
-        return userStorage.update(User);
+    public User updateUser(User user) {
+        return userStorage.update(user);
     }
 
     public User addFriend(Integer idUser, Integer idFriends) {
