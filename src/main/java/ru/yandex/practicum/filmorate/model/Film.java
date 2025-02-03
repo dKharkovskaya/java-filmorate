@@ -16,6 +16,7 @@ public class Film {
     private LocalDate releaseDate;
     @NonNull
     private long duration;
+    private long like = 0;
 
 
 }
