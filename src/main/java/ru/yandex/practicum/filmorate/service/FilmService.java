@@ -28,8 +28,8 @@ public class FilmService {
         return filmStorage.create(film);
     }
 
-    public Film updateFilm(Film Film) {
-        return filmStorage.update(Film);
+    public Film updateFilm(Film film) {
+        return filmStorage.update(film);
     }
 
     public Film addLike(Integer idFilm, Integer idUser) {
