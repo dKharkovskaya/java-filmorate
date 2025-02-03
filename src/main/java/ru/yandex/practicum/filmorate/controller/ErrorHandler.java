@@ -14,7 +14,7 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(final ValidationException e) {
         return new ErrorResponse(
-                String.format("Ошибка валидации",  e.getMessage())
+                String.format("Ошибка валидации", e.getMessage())
         );
     }
 
@@ -28,13 +28,5 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleDuplicatedDataException(final DuplicatedDataException e) {
         return new ErrorResponse(e.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleThrowable(final Throwable ignored) {
-        return new ErrorResponse(
-                "Произошла непредвиденная ошибка."
-        );
     }
 }
