@@ -45,9 +45,6 @@ public class UserService {
     public User deleteFriend(Integer idUser, Integer idFriends) {
         User user = userStorage.findUsersById(idUser);
         User friend = userStorage.findUsersById(idFriends);
-        if (user.getFriends().contains(friend)) {
-            throw new ValidationException("Пользователи уже являются друзьями друг друга");
-        }
         user.getFriends().remove(friend);
         friend.getFriends().remove(user);
         return user;

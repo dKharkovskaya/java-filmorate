@@ -3,7 +3,8 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.exception.DuplicatedDataException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
@@ -34,9 +35,14 @@ public class FilmService {
 
     public Film addLike(Integer idFilm, Integer idUser) {
         User user = userStorage.findUsersById(idUser);
-        Film film = filmStorage.findFilmsById(idFilm);
+        Film film;
+        try {
+            film = filmStorage.findFilmsById(idFilm);
+        } catch (Exception e) {
+            throw new NotFoundException("Фильм не найден");
+        }
         if (user.getLikedFilms().contains(idFilm)) {
-            throw new ValidationException("Пользователь " + user.getName() + " уже ставил лайк фильму " + film.getName());
+            throw new DuplicatedDataException("Пользователь " + user.getName() + " уже ставил лайк фильму " + film.getName());
         }
         user.getLikedFilms().add(film);
         film.setLike(film.getLike() + 1);
