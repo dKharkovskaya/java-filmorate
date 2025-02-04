@@ -45,7 +45,7 @@ public class UserService {
         } catch (Exception e) {
             throw new NotFoundException("Пользователь не найден");
         }
-        if (user.getFriends().contains(friend)) {
+        if (user.getFriends().contains(idFriends)) {
             throw new ValidationException("Пользователи уже являются друзьями друг друга");
         }
         user.getFriends().add(idFriends);
@@ -56,8 +56,8 @@ public class UserService {
     public User deleteFriend(Integer idUser, Integer idFriends) {
         User user = userStorage.findUsersById(idUser);
         User friend = userStorage.findUsersById(idFriends);
-        user.getFriends().remove(friend);
-        friend.getFriends().remove(user);
+        user.getFriends().remove(idFriends);
+        friend.getFriends().remove(idUser);
         return user;
     }
 
@@ -68,7 +68,7 @@ public class UserService {
         Set<Integer> friendFriends = friend.getFriends();
         return currentUserFriends.stream()
                 .filter(friendFriends::contains)
-                .map(id -> userStorage.findUsersById(id))
+                .map(userStorage::findUsersById)
                 .collect(Collectors.toList());
     }
 
@@ -76,7 +76,7 @@ public class UserService {
         User user = userStorage.findUsersById(idUser);
         log.info("Получен список друзей пользователя с id = {}", user.getId());
         return user.getFriends().stream()
-                .map(id -> userStorage.findUsersById(id))
+                .map(userStorage::findUsersById)
                 .collect(Collectors.toList());
     }
 }
