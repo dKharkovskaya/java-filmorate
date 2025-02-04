@@ -44,7 +44,7 @@ public class FilmService {
         if (user.getLikedFilms().contains(idFilm)) {
             throw new DuplicatedDataException("Пользователь " + user.getName() + " уже ставил лайк фильму " + film.getName());
         }
-        user.getLikedFilms().add(film);
+        user.getLikedFilms().add(idFilm);
         film.setLike(film.getLike() + 1);
         return film;
     }

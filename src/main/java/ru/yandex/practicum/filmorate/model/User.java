@@ -17,7 +17,7 @@ public class User {
     private String name;
     @NonNull
     private LocalDate birthday;
-    private Set<User> friends = new HashSet<>();
-    private Set<Film> likedFilms = new HashSet<>();
+    private Set<Integer> friends = new HashSet<>();
+    private Set<Integer> likedFilms = new HashSet<>();
 
 }

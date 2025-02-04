@@ -48,8 +48,8 @@ public class UserService {
         if (user.getFriends().contains(friend)) {
             throw new ValidationException("Пользователи уже являются друзьями друг друга");
         }
-        user.getFriends().add(friend);
-        friend.getFriends().add(user);
+        user.getFriends().add(idFriends);
+        friend.getFriends().add(idUser);
         return user;
     }
 
@@ -64,11 +64,11 @@ public class UserService {
     public List<User> showCommonListFriend(Integer idUser, Integer idFriends) {
         User user = userStorage.findUsersById(idUser);
         User friend = userStorage.findUsersById(idFriends);
-        Set<User> currentUserFriends = user.getFriends();
-        Set<User> friendFriends = friend.getFriends();
+        Set<Integer> currentUserFriends = user.getFriends();
+        Set<Integer> friendFriends = friend.getFriends();
         return currentUserFriends.stream()
                 .filter(friendFriends::contains)
-                .map(userMap -> userStorage.findUsersById(userMap.getId()))
+                .map(id -> userStorage.findUsersById(id))
                 .collect(Collectors.toList());
     }
 
@@ -76,7 +76,7 @@ public class UserService {
         User user = userStorage.findUsersById(idUser);
         log.info("Получен список друзей пользователя с id = {}", user.getId());
         return user.getFriends().stream()
-                .map(friend -> userStorage.findUsersById(friend.getId()))
+                .map(id -> userStorage.findUsersById(id))
                 .collect(Collectors.toList());
     }
 }
