@@ -29,4 +29,5 @@ public class ErrorHandler {
     public ErrorResponse handleDuplicatedDataException(final DuplicatedDataException e) {
         return new ErrorResponse(e.getMessage());
     }
+
 }

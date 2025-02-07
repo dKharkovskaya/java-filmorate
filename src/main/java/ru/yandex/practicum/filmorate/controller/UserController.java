@@ -54,4 +54,5 @@ public class UserController {
     public Collection<User> getCommonFriends(@PathVariable Integer id, @PathVariable("other-id") Integer otherId) {
         return userService.showCommonListFriend(id, otherId);
     }
+
 }
