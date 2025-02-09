@@ -14,7 +14,6 @@ import ru.yandex.practicum.filmorate.storage.UserStorage;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,11 +33,9 @@ public class FilmService {
     }
 
     public Film updateFilm(Film film) {
-        for (Film checkFilm : filmStorage.findAllFilms()) {
-            if (Objects.equals(checkFilm.getId(), film.getId())) {
-                validateFilm(film);
-                return filmStorage.update(film);
-            }
+        if (filmStorage.findFilmsById(film.getId()) != null) {
+            validateFilm(film);
+            return filmStorage.update(film);
         }
         throw new NotFoundException("Пост с id = " + film.getId() + " не найден");
 

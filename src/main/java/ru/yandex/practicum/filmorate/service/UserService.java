@@ -11,7 +11,6 @@ import ru.yandex.practicum.filmorate.storage.UserStorage;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -32,11 +31,9 @@ public class UserService {
     }
 
     public User updateUser(User user) {
-        for (User checkUser : userStorage.findAllUsers()) {
-            if (Objects.equals(checkUser.getId(), user.getId())) {
-                validateUser(user);
-                return userStorage.update(user);
-            }
+        if (userStorage.findUsersById(user.getId()) != null) {
+            validateUser(user);
+            return userStorage.update(user);
         }
         throw new NotFoundException("Пользователь с id = " + user.getId() + " не найден");
     }
