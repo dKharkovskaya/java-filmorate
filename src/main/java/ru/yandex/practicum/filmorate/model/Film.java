@@ -13,6 +13,10 @@ public class Film {
     @NonNull
     private String description;
     @NonNull
+    private String genre;
+    @NonNull
+    private String rating;
+    @NonNull
     private LocalDate releaseDate;
     @NonNull
     private long duration;
