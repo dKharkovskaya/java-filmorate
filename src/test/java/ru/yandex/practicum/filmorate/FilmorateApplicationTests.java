@@ -1,84 +1,83 @@
 package ru.yandex.practicum.filmorate;
 
+import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
+import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.memory.DbFilmStorage;
+import ru.yandex.practicum.filmorate.storage.memory.DbMpaStorage;
+import ru.yandex.practicum.filmorate.storage.memory.DbUserStorage;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
+import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @SpringBootTest
+@AutoConfigureTestDatabase
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 class FilmorateApplicationTests {
-    /*static User user1;
-    static FilmController filmController = new FilmController(new FilmService(new InMemoryFilmStorage(), new InMemoryUserStorage()));
-    static UserController userController = new UserController(new UserService(new InMemoryUserStorage()));
-    static Film film1;
+    private final DbUserStorage dbUserStorage;
+    private final DbFilmStorage dbFilmStorage;
+    private final DbMpaStorage dbMpaStorage;
 
-    @BeforeAll
-    static void setUp() {
-        user1 = new User("user@ty.ru", "user", LocalDate.of(1990, 1, 1));
-        film1 = new Film("film1", "film1 description", LocalDate.of(2000, 2, 2), 120);
+    @Test
+    @Order(1)
+    public void addUser() {
+        User user = new User(
+                (int) 1,
+                "test@test.com",
+                "test",
+                "Name",
+                LocalDate.of(1991, 6, 1),
+                Set.of(0)
+        );
+
+        dbUserStorage.create(user);
+
+        User addedUser = dbUserStorage.findById(1);
+
+        assertThat(addedUser).isNotNull();
+        assertThat(addedUser.getId()).isEqualTo(user.getId());
+        assertThat(addedUser.getEmail()).isEqualTo(user.getEmail());
+        assertThat(addedUser.getLogin()).isEqualTo(user.getLogin());
+        assertThat(addedUser.getName()).isEqualTo(user.getName());
+        assertThat(addedUser.getBirthday()).isEqualTo(user.getBirthday());
     }
 
     @Test
-    void contextLoads() {
-    }
+    @Order(2)
+    public void addFilm() {
+        Mpa mpa = dbMpaStorage.findById(1);
+        assertThat(mpa).isNotNull();
 
-    @Test
-    void putFilm() {
-        Film filmCreated = filmController.create(film1);
-        assertNotNull(filmCreated, "putFilm does not return correct object");
-        film1 = filmCreated;
-    }
+        Film film = new Film(
+                 1,
+                "New film",
+                "New Description",
+                LocalDate.of(3000, 8, 1),
+                1,
+                new LinkedHashSet<Genre>(),
+                new Mpa(),
+                Set.of(3)
+        );
+        film.setMpa(mpa);
 
-    @Test
-    void firstUpdateFilm() {
-        Film filmCreated = filmController.create(film1);
-        Film updateFilm = filmCreated;
-        updateFilm.setDuration(100);
-        updateFilm = filmController.update(film1);
-        assertEquals(100, updateFilm.getDuration());
-    }
+        dbFilmStorage.create(film);
+        Film addedFilm = dbFilmStorage.findById(1);
 
-    @Test
-    void findAllFilm() {
-        Collection<Film> filmCollention = filmController.findAll();
-        assertNotNull(filmCollention, "findAllFilm does not return correct object");
+        assertThat(addedFilm).isNotNull();
+        assertThat(addedFilm.getId()).isEqualTo(film.getId());
+        assertThat(addedFilm.getName()).isEqualTo(film.getName());
+        assertThat(addedFilm.getDescription()).isEqualTo(film.getDescription());
+        assertThat(addedFilm.getReleaseDate()).isEqualTo(film.getReleaseDate());
+        assertThat(addedFilm.getDuration()).isEqualTo(film.getDuration());
+        assertThat(addedFilm.getMpa()).isEqualTo(film.getMpa());
     }
-
-    @Test
-    void putUser() {
-        User userCreated = userController.create(user1);
-        assertNotNull(userCreated, "putUser does not return correct object");
-        user1 = userCreated;
-    }
-
-    @Test
-    void firstUpdateUser() {
-        User userCreated = userController.update(user1);
-        User updateUser = userCreated;
-        updateUser.setName("Pasha");
-        updateUser = userController.update(user1);
-        assertEquals("Pasha", updateUser.getName());
-    }
-
-    //логин не может быть пустым и содержать пробелы
-    @Test
-    void createUserWithoutLogin() {
-        User user = new User("ggg@uu.ru", "", LocalDate.of(2026, 1, 1));
-        ValidationException thrown = Assertions.assertThrows(ValidationException.class, () -> {
-            User createdUser = userController.create(user);
-        }, "You can't created User without login");
-    }
-
-    @Test
-    public void shouldExceptionUser() {
-        User user = new User("ggg", "ytyt", LocalDate.of(2026, 1, 1));
-        ValidationException thrown = Assertions.assertThrows(ValidationException.class, () -> {
-            User createdUser = userController.create(user);
-        }, "You can't created User without correct email");
-    }
-
-    @Test
-    public void shouldExceptionFilm() {
-        Film film = new Film("", "ytyt", LocalDate.of(2026, 1, 1), 67);
-        ValidationException thrown = Assertions.assertThrows(ValidationException.class, () -> {
-            Film createdFilm = filmController.create(film);
-        }, "You can't created Film without name");
-    }*/
 }
