@@ -144,7 +144,7 @@ public class DbFilmStorage implements FilmStorage {
         LocalDate releaseDate = rs.getDate("releaseDate").toLocalDate();
         Integer duration = rs.getInt("duration");
 
-        String genreSql = "select g.* \n" +
+        String genreSql = "select DISTINCT g.* \n" +
                 "from films_genres f\n" +
                 "JOIN genres g ON (f.genre_id = g.id)\n" +
                 "where film_id = ?";
@@ -153,7 +153,7 @@ public class DbFilmStorage implements FilmStorage {
         String likesSql = "select * from film_likes where film_id = ?";
         List<Integer> usersCollection = jdbcTemplate.query(likesSql, (rs1, rowNum) -> makeFilmsLike(rs1), id);
 
-        return new Film(id, name, description, releaseDate, duration, new ArrayList<>(genreCollection), new Mpa(mpaId, mpaName), new HashSet<>(usersCollection));
+        return new Film(id, name, description, releaseDate, duration, new LinkedHashSet<>(genreCollection), new Mpa(mpaId, mpaName), new HashSet<>(usersCollection));
     }
 
     private Genre makeFilmsGenre(ResultSet rs) throws SQLException {

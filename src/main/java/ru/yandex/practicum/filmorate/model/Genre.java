@@ -16,8 +16,4 @@ public class Genre {
     public Genre() {
     }
 
-    public int compareTo(Genre o) {
-        return (int) (this.getId() - o.getId());
-    }
-
 }

@@ -16,11 +16,11 @@ public class Film {
     private LocalDate releaseDate;
     @Positive
     private long duration;
-    private ArrayList<Genre> genres;
+    private LinkedHashSet<Genre> genres;
     private Mpa mpa;
     private Set<Integer> likes;
 
-    public Film(Integer id, String name, String description, LocalDate releaseDate, int duration, ArrayList<Genre> genres, Mpa mpa, Set<Integer> likes) {
+    public Film(Integer id, String name, String description, LocalDate releaseDate, int duration, LinkedHashSet<Genre> genres, Mpa mpa, Set<Integer> likes) {
         this.id = id;
         this.name = name;
         this.description = description;
