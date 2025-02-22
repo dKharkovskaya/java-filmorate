@@ -12,11 +12,11 @@ import java.util.Map;
 public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Integer, Film> films = new HashMap<>();
 
-    public Collection<Film> findAllFilms() {
+    public Collection<Film> findAll() {
         return films.values();
     }
 
-    public Film findFilmsById(Integer id) {
+    public Film findById(Integer id) {
         return films.get(id);
     }
 
@@ -33,6 +33,15 @@ public class InMemoryFilmStorage implements FilmStorage {
         oldFilm.setReleaseDate(film.getReleaseDate());
         oldFilm.setDescription(film.getDescription());
         return oldFilm;
+    }
+
+    public boolean deleteById(Integer id) {
+        if (films.containsKey(id)) {
+            films.remove(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // вспомогательный метод для генерации идентификатора нового поста

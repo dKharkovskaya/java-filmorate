@@ -1,32 +1,42 @@
 package ru.yandex.practicum.filmorate.model;
 
+import jakarta.validation.constraints.*;
 import lombok.Data;
-import lombok.NonNull;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Data
 public class Film {
     private Integer id;
-    @NonNull
+    @NotBlank
     private String name;
-    @NonNull
+    @Size(max = 200)
     private String description;
-    @NonNull
-    private String genre;
-    @NonNull
-    private String rating;
-    @NonNull
     private LocalDate releaseDate;
-    @NonNull
+    @Positive
     private long duration;
-    @NonNull
-    private Set<Genre> genres = new HashSet<>();
-    @NonNull
+    private ArrayList<Genre> genres;
     private Mpa mpa;
-    @NonNull
-    private Set<Integer> likes = new HashSet<>();
+    private Set<Integer> likes;
+
+    public Film(Integer id, String name, String description, LocalDate releaseDate, int duration, ArrayList<Genre> genres, Mpa mpa, Set<Integer> likes) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+        this.genres = genres;
+        this.mpa = mpa;
+        this.likes = likes;
+    }
+
+    public void addGenre(Genre genre) {
+        genres.add(genre);
+    }
+
+    public void deleteGenre(Genre genre) {
+        genres.remove(genre);
+    }
 
 }

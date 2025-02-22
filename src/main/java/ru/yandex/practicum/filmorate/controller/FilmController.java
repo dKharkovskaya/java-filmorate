@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -13,19 +14,30 @@ import java.util.List;
 @RequestMapping("/films")
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class FilmController {
     private final FilmService filmService;
 
     @GetMapping
-    public Collection<Film> findAllFilms() {
+    public Collection<Film> findAll() {
         log.info("GET /film");
-        return filmService.findAllFilms();
+        return filmService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public Film findById(@PathVariable("id") Integer id) {
+        return filmService.findById(id);
+    }
+
+    @GetMapping("/popular")
+    public List<Film> getTopFilms(@RequestParam(defaultValue = "10") int count) {
+        return filmService.getTop(count);
     }
 
     @PostMapping
     public Film create(@RequestBody Film film) {
         log.info("POST /film/{}", film.getName());
-        return filmService.createFilm(film);
+        return filmService.createFilm(film); //вернуть если ничего не поменяется
     }
 
     @PutMapping
@@ -39,14 +51,19 @@ public class FilmController {
         return filmService.addLike(id, idUser);
     }
 
-    @DeleteMapping("/{id}/like/{user-id}")
-    public Film deleteLike(@PathVariable Integer id, @PathVariable("user-id") Integer idUser) {
-        return filmService.deleteLike(id, idUser);
+    @DeleteMapping("/{id}")
+    public Film delete(
+            @PathVariable Integer id
+    ) {
+        return filmService.deleteById(id);
     }
 
-    @GetMapping("/popular")
-    public List<Film> getTopFilms(@RequestParam(defaultValue = "10") int count) {
-        return filmService.getTop(count);
+    @DeleteMapping("/{id}/like/{userId}")
+    public Film deleteLike(
+            @PathVariable("id") Integer id,
+            @PathVariable("userId") Integer userId
+    ) {
+        return filmService.deleteLike(id, userId);
     }
 
 }
