@@ -57,9 +57,11 @@ public class DbFilmStorage implements FilmStorage {
     public List<Film> findAll() {
         String sql = "select f.id id, f.name name,f.description description,\n" +
                 "f.mpa_id mpa_id, m.name as mpa_name,\n" +
-                "f.releaseDate releaseDate, f.duration as duration\n" +
+                "f.releaseDate releaseDate, f.duration as duration, g.NAME  as genres_name \n" +
                 "from films f\n" +
-                "JOIN mpa m ON m.id = f.mpa_id";
+                "JOIN mpa m ON m.id = f.mpa_id\n" +
+                "JOIN FILMS_GENRES fg  ON fg.FILM_ID = f.id\n" +
+                "JOIN GENRES g ON g.ID = fg.GENRE_ID";
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeFilm(rs));
     }
@@ -121,7 +123,7 @@ public class DbFilmStorage implements FilmStorage {
     public Film findById(Integer id) {
         String sql = "select f.id id, f.name name,f.description description,\n" +
                 "f.mpa_id mpa_id, m.name as mpa_name,\n" +
-                "f.releaseDate releaseDate, f.duration as duration\n" +
+                "f.releaseDate releaseDate, f.duration as duration \n" +
                 "from films f\n" +
                 "JOIN mpa m ON m.id = f.mpa_id\n" +
                 "where f.id = ?";

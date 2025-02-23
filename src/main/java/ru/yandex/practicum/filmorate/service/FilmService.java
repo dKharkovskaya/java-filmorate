@@ -15,6 +15,7 @@ import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,6 +26,8 @@ import java.util.stream.Collectors;
 public class FilmService {
     private final FilmStorage filmStorage;
     private final UserStorage userStorage;
+    private final MpaService mpaService;
+    private final GenreService genreService;
 
     public Collection<Film> findAll() {
         return filmStorage.findAll();
@@ -121,13 +124,11 @@ public class FilmService {
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
             throw new ValidationException("дата релиза — не раньше 28 декабря 1895 года;");
         }
-        if (film.getMpa().getId() > 5) {
-            throw new BadRequestException("Id в БД не существует");
-        }
+        if (mpaService.findById(film.getMpa().getId()) == null) throw new NotFoundException("Mpa not found");
         if (film.getGenres() != null) {
             for (Genre genre : film.getGenres()) {
-                if (genre.getId() > 10) {
-                    throw new BadRequestException("Id в БД не существует");
+                if (genreService.findById(genre.getId()) == null) {
+                    throw new BadRequestException("Genre not found");
                 }
             }
         }
