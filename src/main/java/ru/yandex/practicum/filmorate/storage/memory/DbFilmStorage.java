@@ -126,7 +126,7 @@ public class DbFilmStorage implements FilmStorage {
                 "f.releaseDate releaseDate, f.duration as duration \n" +
                 "from films f\n" +
                 "JOIN mpa m ON m.id = f.mpa_id\n" +
-                "where f.id = ?";
+                "WHERE f.id = ?";
 
         List<Film> filmCollection = jdbcTemplate.query(sql, (rs, rowNum) -> makeFilm(rs), id);
         if (filmCollection.size() == 1) {
