@@ -12,11 +12,11 @@ import java.util.Map;
 public class InMemoryUserStorage implements UserStorage {
     private final Map<Integer, User> users = new HashMap<>();
 
-    public Collection<User> findAllUsers() {
+    public Collection<User> findAll() {
         return users.values();
     }
 
-    public User findUsersById(Integer id) {
+    public User findById(Integer id) {
         return users.get(id);
     }
 
@@ -33,6 +33,15 @@ public class InMemoryUserStorage implements UserStorage {
         oldUser.setLogin(user.getLogin());
         oldUser.setEmail(user.getEmail());
         return oldUser;
+    }
+
+    public boolean deleteById(Integer id) {
+        if (users.containsKey(id)) {
+            users.remove(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // вспомогательный метод для генерации идентификатора нового поста
